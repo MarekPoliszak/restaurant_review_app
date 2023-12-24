@@ -25,12 +25,12 @@ public class RestaurantController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     private void addRestaurant(@RequestBody Restaurant newRestaurant) {
-        //validateRestaurant(newRestaurant);
+        validateNewRestaurant(newRestaurant);
         restaurantRepository.save(newRestaurant);
     }
 
     @GetMapping("/{id}")
-    private Restaurant getRestaurant(@PathVariable Long id) {
+    public Restaurant getRestaurant(@PathVariable Long id) {
         Optional<Restaurant> existingRestaurantOptional = restaurantRepository.findById(id);
         if(existingRestaurantOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -39,14 +39,14 @@ public class RestaurantController {
     }
 
     @GetMapping
-    private Iterable<Restaurant> getAllRestaurants() {
+    public Iterable<Restaurant> getAllRestaurants() {
         return restaurantRepository.findAll();
     }
 
     @GetMapping("/search")
-    private Iterable<Restaurant> getRestaurantsByZipCodeAndAllergies(@RequestParam String zipCode,
+    public Iterable<Restaurant> getRestaurantsByZipCodeAndAllergies(@RequestParam String zipCode,
                                                                      @RequestParam String allergy) {
-        //validateZipCode(zipCode);
+        validateZipCode(zipCode);
         Iterable<Restaurant> restaurants = Collections.EMPTY_LIST;
         if(allergy.equalsIgnoreCase("peanut")) {
             restaurants = restaurantRepository.findRestaurantsByZipCodeAndPeanutScoreNotNullOrderedByPeanutScore(zipCode);

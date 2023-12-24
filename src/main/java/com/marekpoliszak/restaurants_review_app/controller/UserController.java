@@ -23,6 +23,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void addUser(@RequestBody User user) {
+        validateUser(user);
         userRepository.save(user);
     }
 
